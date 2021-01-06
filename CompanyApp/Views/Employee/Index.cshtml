@@ -1,0 +1,66 @@
+﻿@model IEnumerable<CompanyApp.Models.Employee>
+@{
+    ViewBag.Title = "Munkatársak";
+}
+
+<h2>Munkatársak</h2>
+
+<p>
+    @Html.ActionLink("Új munkatárs felvétele", "Create", null, new { @class = "btn btn-default" })
+</p>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <tr>
+            <th>
+               @Html.DisplayNameFor(m => m.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Position)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Company)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>
+                    @Html.HiddenFor(model => m.Id)
+                    @Html.DisplayFor(model => m.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => m.Position)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => m.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => m.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => m.Company.CompanyName)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Employee", new { id = m.Id })" class="btn btn-sm btn-default" title="Adatok módosítása">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a href="@Url.Action("Delete", "Employee", new { id = m.Id })" class="btn btn-sm btn-danger" title="Munkatárs törlése">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+

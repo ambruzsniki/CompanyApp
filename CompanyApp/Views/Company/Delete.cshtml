@@ -1,7 +1,20 @@
-﻿
+﻿@model CompanyApp.Models.Company
 @{
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Cég törlése</h2>
+
+@using (Html.BeginForm("Delete", "Company", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+
+    @Html.HiddenFor(m => m.Id)
+    <h4>Biztosan végleg törölni szeretnéd @Model.CompanyName céget?</h4>
+    <h5>A céghez tartozó összes dolgozó is törlésre kerül.</h5>
+
+    <input type="submit" value="Törlés" class="btn btn-danger" />
+    @Html.ActionLink("Mégse", "Index", "Company", new { @class = "btn btn-default" })
+
+}
+
 

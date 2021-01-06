@@ -1,7 +1,50 @@
-﻿
+﻿@model IEnumerable<CompanyApp.Models.Company>
 @{
-    ViewBag.Title = "Company";
+    ViewBag.Title = "Cégek";
 }
 
-<h2>Company</h2>
+<h2>Cégek</h2>
+<p>
+    @Html.ActionLink("Új cég felvétele", "Create", null, new { @class = "btn btn-default" })
+</p>
 
+@if (Model.Any())
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.CompanyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>
+                    @Html.HiddenFor(model => m.Id)
+                    @Html.DisplayFor(model => m.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => m.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => m.PhoneNumber)
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", "Company", new { id = m.Id })" class="btn btn-sm btn-default" title="Adatok módosítása">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a href="@Url.Action("Delete", "Company", new { id = m.Id })" class="btn btn-sm btn-danger" title="Cég törlése">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+}
