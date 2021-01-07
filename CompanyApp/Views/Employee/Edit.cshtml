@@ -1,7 +1,48 @@
-﻿
+﻿@model CompanyApp.Models.Employee 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Munkatárs adatainak szerkesztése";
 }
 
-<h2>Edit</h2>
+<h2>Adatok szerkesztése</h2>
 
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Position, new { @class = "col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Position, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Position, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CompanyId, new { @class = "col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("CompanyId", new SelectList(CompanyApp.Init.companyList, "Id", "CompanyName", Model.CompanyId), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CompanyId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Módosítás" />
+    @Html.ActionLink("Mégse", "Index", "Employee", new { @class = "btn btn-default" })
+
+}

@@ -26,10 +26,19 @@ namespace CompanyApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var company = companyList.Find(x => x.CompanyName.Equals(model.CompanyName));
-                model.Company = company;
-                employeeList.Add(model);
-                return RedirectToAction("Index");
+                var company = companyList.FirstOrDefault(x => x.Id == model.CompanyId);
+                if (company != null)
+                {
+                    model.Company = company;
+                    var idMaxVal = employeeList.Max(x => x.Id);
+                    model.Id = idMaxVal + 1;
+                    employeeList.Add(model);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
             }
             else
             {
@@ -40,19 +49,51 @@ namespace CompanyApp.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = employeeList.FirstOrDefault(x => x.Id == id);
+
+            if (model != null)
+            {
+                return View(model);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
 
         [HttpPost]
         public ActionResult Edit(Employee model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var original = employeeList.FirstOrDefault(x => x.Id == model.Id);
+                var company = companyList.FirstOrDefault(x => x.Id == model.CompanyId);
+
+                if (original != null && company != null)
+                {
+                    original.Name = model.Name;
+                    original.Email = model.Email;
+                    original.PhoneNumber = model.PhoneNumber;
+                    original.Position = model.Position;
+                    original.CompanyId = model.CompanyId;
+                    original.Company = company;
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         [HttpGet]
-        public ActionResult Delete(string name)
+        public ActionResult Delete(int id)
         {
-            Employee selectedItem = employeeList.Find(x => x.Name.Equals(name));
+            Employee selectedItem = employeeList.FirstOrDefault(x => x.Id == id);
 
             if (selectedItem != null)
             {
@@ -65,11 +106,19 @@ namespace CompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(string name, FormCollection form)
+        public ActionResult Delete(int id, FormCollection form)
         {
-            var selectedEmployee = employeeList.Find(x => x.Name.Equals(name));
-            employeeList.Remove(selectedEmployee);
-            return RedirectToAction("Index");
+            var selectedEmployee = employeeList.FirstOrDefault(x => x.Id == id);
+
+            if (selectedEmployee != null)
+            {
+                employeeList.Remove(selectedEmployee);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
 
     }

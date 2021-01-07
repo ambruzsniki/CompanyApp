@@ -1,6 +1,7 @@
 ﻿using CompanyApp.Models;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using static CompanyApp.Init;
 
@@ -24,6 +25,8 @@ namespace CompanyApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                var idMaxVal = companyList.Max(x => x.Id);
+                model.Id = idMaxVal + 1;
                 companyList.Add(model);
                 return RedirectToAction("Index");
             }
@@ -36,19 +39,46 @@ namespace CompanyApp.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = companyList.FirstOrDefault(x => x.Id == id);
+            if (model != null)
+            {
+                return View(model);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
 
         [HttpPost]
         public ActionResult Edit(Company model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var original = companyList.FirstOrDefault(x => x.Id == model.Id);
+                if (original != null)
+                {
+                    original.CompanyName = model.CompanyName;
+                    original.Address = model.Address;
+                    original.PhoneNumber = model.PhoneNumber;
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         [HttpGet]
-        public ActionResult Delete(string name)
+        public ActionResult Delete(int id)
         {
-            var deletedItem = companyList.Find(x => x.CompanyName.Equals(name));
+            var deletedItem = companyList.FirstOrDefault(x => x.Id == id);
+
             if(deletedItem != null)
             {
                 return View(deletedItem);
@@ -60,11 +90,11 @@ namespace CompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(string name, FormCollection form)
+        public ActionResult Delete(int id, FormCollection form)
         {
-            var selectedCompany = companyList.Find(x => x.CompanyName.Equals(name));
+            var selectedCompany = companyList.FirstOrDefault(x => x.Id == id);
             companyList.Remove(selectedCompany);
-            employeeList.RemoveAll(x => x.Company.CompanyName.Equals(name));
+            employeeList.RemoveAll(x => x.Company.Id == id);
 
             return RedirectToAction("Index");
         }

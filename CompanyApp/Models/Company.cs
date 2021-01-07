@@ -9,6 +9,9 @@ namespace CompanyApp.Models
     public class Company
     {
         [Required]
+        public int Id { get; set; }
+
+        [Required]
         [Display(Name = "Cégnév")]
         public string CompanyName { get; set; }
 

@@ -11,21 +11,21 @@
         @Html.LabelFor(m => m.CompanyName, new { @class = "col-md-2" })
         <div class="col-md-4">
             @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.CompanyName)
+            @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Address, new { @class = "col-md-2" })
         <div class="col-md-4">
             @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Address)
+            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2" })
         <div class="col-md-4">
             @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.PhoneNumber)
+            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
         </div>
     </div>
     <input type="submit" class="btn btn-primary" value="Létrehozás" />

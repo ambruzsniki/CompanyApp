@@ -6,7 +6,7 @@
 <h2>Munkatárs törlése</h2>
 @using (Html.BeginForm("Delete", "Employee", FormMethod.Post, new { @class = "form-horizontal" }))
 {
-    @Html.Hidden("name", Model.Name)
+    @Html.HiddenFor(m => m.Id)
     <h4>Biztosan végleg törölni szeretnéd @Model.Name munkatársat?</h4>
 
     <input type="submit" value="Törlés" class="btn btn-danger" />

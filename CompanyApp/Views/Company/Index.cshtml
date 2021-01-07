@@ -36,10 +36,10 @@
                     @Html.DisplayFor(model => m.PhoneNumber)
                 </td>
                 <td>
-                    <a href="@Url.Action("Delete", "Company", new { name = m.CompanyName })" class="btn btn-sm btn-default" title="Adatok módosítása">
+                    <a href="@Url.Action("Edit", "Company", new { id = m.Id })" class="btn btn-sm btn-default" title="Adatok módosítása">
                         <span class="glyphicon glyphicon-edit"></span>
                     </a>
-                    <a href="@Url.Action("Delete", "Company", new { name = m.CompanyName })" class="btn btn-sm btn-danger" title="Cég törlése">
+                    <a href="@Url.Action("Delete", "Company", new { id = m.Id })" class="btn btn-sm btn-danger" title="Cég törlése">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </td>

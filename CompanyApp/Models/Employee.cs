@@ -9,6 +9,9 @@ namespace CompanyApp.Models
     public class Employee
     {
         [Required]
+        public int Id { get; set; }
+
+        [Required]
         [Display(Name = "Név")]
         public string Name { get; set; }
 
@@ -28,7 +31,7 @@ namespace CompanyApp.Models
 
         [Required]
         [Display(Name = "Cégnév")]
-        public string CompanyName { get; set; }
+        public int CompanyId { get; set; }
 
     }
 }

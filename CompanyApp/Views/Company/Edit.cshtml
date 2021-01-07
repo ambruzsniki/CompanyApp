@@ -1,7 +1,33 @@
-﻿
+﻿@model CompanyApp.Models.Company
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Cégadatok módosítása";
 }
 
-<h2>Edit</h2>
-
+<h2>Cég adatainak módosítása</h2>
+@using(Html.BeginForm("Edit", "Company", FormMethod.Post, new { @class= "form-horizontal" }))
+{
+    <div class="form-group">
+        @Html.HiddenFor(m => m.Id)
+        @Html.LabelFor(m => m.CompanyName, new { @class = "col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Address, new { @class = "col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Módosítás" />
+    @Html.ActionLink("Mégse", "Index", "Company", new { @class = "btn btn-default" })
+}
