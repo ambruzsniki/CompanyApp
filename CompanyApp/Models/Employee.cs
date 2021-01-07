@@ -8,8 +8,6 @@ namespace CompanyApp.Models
 {
     public class Employee
     {
-        public int Id { get; set; }
-
         [Required]
         [Display(Name = "Név")]
         public string Name { get; set; }
@@ -26,9 +24,11 @@ namespace CompanyApp.Models
         [Display(Name = "E-mail cím")]
         public string Email { get; set; }
 
+        public Company Company { get; set; }
+
         [Required]
         [Display(Name = "Cégnév")]
-        public Company Company { get; set; }
+        public string CompanyName { get; set; }
 
     }
 }

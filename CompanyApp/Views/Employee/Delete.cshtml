@@ -4,10 +4,11 @@
 }
 
 <h2>Munkatárs törlése</h2>
-@using(Html.BeginForm("Delete", "Employee", FormMethod.Post, new { @class = "form-horizontal" })) { 
-    @Html.HiddenFor(m => m.Id)
+@using (Html.BeginForm("Delete", "Employee", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.Hidden("name", Model.Name)
     <h4>Biztosan végleg törölni szeretnéd @Model.Name munkatársat?</h4>
 
-    <input type="submit" value = "Törlés" class = "btn btn-danger" />
+    <input type="submit" value="Törlés" class="btn btn-danger" />
     @Html.ActionLink("Mégse", "Index", "Employee", new { @class = "btn btn-default" })
 }

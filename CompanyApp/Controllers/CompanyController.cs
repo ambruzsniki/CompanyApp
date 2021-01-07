@@ -22,7 +22,15 @@ namespace CompanyApp.Controllers
         [HttpPost]
         public ActionResult Create(Company model)
         {
-            return View(model);
+            if (ModelState.IsValid)
+            {
+                companyList.Add(model);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -38,9 +46,9 @@ namespace CompanyApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string name)
         {
-            var deletedItem = companyList.Find(x => x.Id == id);
+            var deletedItem = companyList.Find(x => x.CompanyName.Equals(name));
             if(deletedItem != null)
             {
                 return View(deletedItem);
@@ -52,11 +60,11 @@ namespace CompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection form)
+        public ActionResult Delete(string name, FormCollection form)
         {
-            var selectedCompany = companyList.Find(x => x.Id == id);
+            var selectedCompany = companyList.Find(x => x.CompanyName.Equals(name));
             companyList.Remove(selectedCompany);
-            employeeList.RemoveAll(x => x.Company.Id == id);
+            employeeList.RemoveAll(x => x.Company.CompanyName.Equals(name));
 
             return RedirectToAction("Index");
         }

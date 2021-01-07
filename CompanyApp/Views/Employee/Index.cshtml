@@ -35,7 +35,6 @@
         {
             <tr>
                 <td>
-                    @Html.HiddenFor(model => m.Id)
                     @Html.DisplayFor(model => m.Name)
                 </td>
                 <td>
@@ -51,10 +50,10 @@
                     @Html.DisplayFor(model => m.Company.CompanyName)
                 </td>
                 <td>
-                    <a href="@Url.Action("Edit", "Employee", new { id = m.Id })" class="btn btn-sm btn-default" title="Adatok módosítása">
+                    <a href="@Url.Action("Edit", "Employee", new { name = m.Name })" class="btn btn-sm btn-default" title="Adatok módosítása">
                         <span class="glyphicon glyphicon-edit"></span>
                     </a>
-                    <a href="@Url.Action("Delete", "Employee", new { id = m.Id })" class="btn btn-sm btn-danger" title="Munkatárs törlése">
+                    <a href="@Url.Action("Delete", "Employee", new { name = m.Name })" class="btn btn-sm btn-danger" title="Munkatárs törlése">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </td>

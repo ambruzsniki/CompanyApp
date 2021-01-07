@@ -7,8 +7,7 @@
 
 @using (Html.BeginForm("Delete", "Company", FormMethod.Post, new { @class = "form-horizontal" }))
 {
-
-    @Html.HiddenFor(m => m.Id)
+    @Html.Hidden("name", Model.CompanyName)
     <h4>Biztosan végleg törölni szeretnéd @Model.CompanyName céget?</h4>
     <h5>A céghez tartozó összes dolgozó is törlésre kerül.</h5>
 

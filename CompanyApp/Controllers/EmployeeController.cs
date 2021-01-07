@@ -12,9 +12,7 @@ namespace CompanyApp.Controllers
     {
         public ActionResult Index()
         {
-            List<Employee> model = employeeList;
-
-            return View(model);
+            return View(employeeList);
         }
 
         [HttpGet]
@@ -24,9 +22,19 @@ namespace CompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Company model)
+        public ActionResult Create(Employee model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var company = companyList.Find(x => x.CompanyName.Equals(model.CompanyName));
+                model.Company = company;
+                employeeList.Add(model);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -36,15 +44,15 @@ namespace CompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Company model)
+        public ActionResult Edit(Employee model)
         {
             return View();
         }
 
         [HttpGet]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string name)
         {
-            Employee selectedItem = employeeList.Find(x => x.Id == id);
+            Employee selectedItem = employeeList.Find(x => x.Name.Equals(name));
 
             if (selectedItem != null)
             {
@@ -57,10 +65,10 @@ namespace CompanyApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection form)
+        public ActionResult Delete(string name, FormCollection form)
         {
-            var selectedCompany = employeeList.Find(x => x.Id == id);
-            employeeList.Remove(selectedCompany);
+            var selectedEmployee = employeeList.Find(x => x.Name.Equals(name));
+            employeeList.Remove(selectedEmployee);
             return RedirectToAction("Index");
         }
 
