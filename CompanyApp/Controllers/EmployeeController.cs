@@ -30,7 +30,13 @@ namespace CompanyApp.Controllers
                 if (company != null)
                 {
                     model.Company = company;
-                    var idMaxVal = employeeList.Max(x => x.Id);
+                    var idMaxVal = 0;
+
+                    if (employeeList.Any())
+                    {
+                        idMaxVal = employeeList.Max(x => x.Id);
+                    }
+
                     model.Id = idMaxVal + 1;
                     employeeList.Add(model);
                     return RedirectToAction("Index");

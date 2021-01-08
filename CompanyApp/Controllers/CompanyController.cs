@@ -25,7 +25,13 @@ namespace CompanyApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var idMaxVal = companyList.Max(x => x.Id);
+                var idMaxVal = 0;
+
+                if (companyList.Any())
+                {
+                    idMaxVal = companyList.Max(x => x.Id);
+                }
+
                 model.Id = idMaxVal + 1;
                 companyList.Add(model);
                 return RedirectToAction("Index");
