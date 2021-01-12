@@ -1,10 +1,10 @@
-﻿using CompanyApp.Models;
+﻿using CompanyApp.Handler;
+using CompanyApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using static CompanyApp.Init;
 
 namespace CompanyApp.Controllers
 {
@@ -12,6 +12,8 @@ namespace CompanyApp.Controllers
     {
         public ActionResult Index()
         {
+            var handler = new EmployeeHandler();
+            List<Employee> employeeList = handler.GetEmployees();
             return View(employeeList);
         }
 
@@ -26,25 +28,9 @@ namespace CompanyApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var company = companyList.FirstOrDefault(x => x.Id == model.CompanyId);
-                if (company != null)
-                {
-                    model.Company = company;
-                    var idMaxVal = 0;
-
-                    if (employeeList.Any())
-                    {
-                        idMaxVal = employeeList.Max(x => x.Id);
-                    }
-
-                    model.Id = idMaxVal + 1;
-                    employeeList.Add(model);
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return HttpNotFound();
-                }
+                var handler = new EmployeeHandler();
+                handler.Create(model); 
+                return RedirectToAction("Index");
             }
             else
             {
@@ -55,7 +41,8 @@ namespace CompanyApp.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var model = employeeList.FirstOrDefault(x => x.Id == id);
+            var handler = new EmployeeHandler();
+            var model = handler.Get(id);
 
             if (model != null)
             {
@@ -72,17 +59,10 @@ namespace CompanyApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var original = employeeList.FirstOrDefault(x => x.Id == model.Id);
-                var company = companyList.FirstOrDefault(x => x.Id == model.CompanyId);
-
-                if (original != null && company != null)
+                var handler = new EmployeeHandler();
+                var success = handler.Update(model.Id, model);
+                if (success)
                 {
-                    original.Name = model.Name;
-                    original.Email = model.Email;
-                    original.PhoneNumber = model.PhoneNumber;
-                    original.Position = model.Position;
-                    original.CompanyId = model.CompanyId;
-                    original.Company = company;
                     return RedirectToAction("Index");
                 }
                 else
@@ -99,11 +79,12 @@ namespace CompanyApp.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            Employee selectedItem = employeeList.FirstOrDefault(x => x.Id == id);
+            var handler = new EmployeeHandler();
+            var model = handler.Get(id);
 
-            if (selectedItem != null)
+            if (model != null)
             {
-                return View(selectedItem);
+                return View(model);
             }
             else
             {
@@ -114,11 +95,11 @@ namespace CompanyApp.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection form)
         {
-            var selectedEmployee = employeeList.FirstOrDefault(x => x.Id == id);
+            var handler = new EmployeeHandler();
+            var success = handler.Delete(id);
 
-            if (selectedEmployee != null)
+            if (success)
             {
-                employeeList.Remove(selectedEmployee);
                 return RedirectToAction("Index");
             }
             else
@@ -127,5 +108,13 @@ namespace CompanyApp.Controllers
             }
         }
 
+        public static List<Company> GetCompanies()
+        {
+            var handler = new CompanyHandler();
+            List<Company> companyList = handler.GetCompanies().ToList();
+            //List<SelectListItem> list = new List<SelectListItem>();
+            //companyList.ForEach(x => list.Add(new SelectListItem() { Text = x.CompanyName, Value = x.Id.ToString() }));
+            return companyList;
+        }
     }
 }

@@ -34,11 +34,46 @@ namespace CompanyApp.Handler
             }
         }
 
-        public DB.Employee Get(int id)
+        public List<Models.Employee> GetEmployees()
         {
             using(var context = new DbContext())
             {
-                return context.Employees.FirstOrDefault(x => x.Id == id);
+                var employeeList = context.Employees;
+                var list = new List<Models.Employee>();
+
+                foreach(var x in employeeList)
+                {
+                    list.Add(new Models.Employee()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Position = x.Position,
+                        PhoneNumber = x.PhoneNumber,
+                        Email = x.Email,
+                        CompanyId = x.CompanyId,
+                        Company = (Models.Company)context.Companies.FirstOrDefault(y => y.Id == x.CompanyId)
+                    });                   
+                }
+
+                return list;
+            }
+        }
+
+        public Models.Employee Get(int id)
+        {
+            using(var context = new DbContext())
+            {
+                var employee = context.Employees.FirstOrDefault(x => x.Id == id);
+
+                return new Models.Employee()
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    Position = employee.Position,
+                    PhoneNumber = employee.PhoneNumber,
+                    Email = employee.Email,
+                    CompanyId = employee.CompanyId
+                };
             }
         }
 

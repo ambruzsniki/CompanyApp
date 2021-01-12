@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using static CompanyApp.Init;
 
 namespace CompanyApp.Controllers
 {
@@ -36,14 +35,7 @@ namespace CompanyApp.Controllers
 
                 if (company != null)
                 {
-                    var model = new Company()
-                    {
-                        CompanyName = company.CompanyName,
-                        Address = company.Address,
-                        PhoneNumber = company.PhoneNumber
-                    };
-
-                    return Request.CreateResponse(HttpStatusCode.OK, model);
+                    return Request.CreateResponse(HttpStatusCode.OK, company);
                 }
                 else
                 {

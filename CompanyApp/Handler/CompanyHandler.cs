@@ -24,11 +24,40 @@ namespace CompanyApp.Handler
             }
         }
 
-        public DB.Company Get(int id)
+        public IEnumerable<Models.Company> GetCompanies()
+        {
+            using(var context = new DbContext())
+            {
+                return context.Companies.Select(x => new Models.Company()
+                {
+                    CompanyName = x.CompanyName,
+                    PhoneNumber = x.PhoneNumber,
+                    Address = x.Address,
+                    Id = x.Id
+                }).ToList();
+            }
+        }
+
+        public Models.Company Get(int id)
         {
             using (var context = new DbContext())
             {
-                return context.Companies.FirstOrDefault(x => x.Id == id);
+                var company = context.Companies.FirstOrDefault(x => x.Id == id);
+
+                if (company != null)
+                {
+                    return new Models.Company()
+                    {
+                        Id = company.Id,
+                        CompanyName = company.CompanyName,
+                        Address = company.Address,
+                        PhoneNumber = company.PhoneNumber
+                    };
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 

@@ -21,7 +21,6 @@ namespace CompanyApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            CompanyApp.Init.CreateInstances();
             Database.SetInitializer<DbContext>(null);
             GlobalConfiguration.Configuration.EnsureInitialized();
         }

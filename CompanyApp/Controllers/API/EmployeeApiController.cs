@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-using static CompanyApp.Init;
 
 namespace CompanyApp.Controllers.API
 {
@@ -46,16 +45,7 @@ namespace CompanyApp.Controllers.API
 
                 if (employee != null)
                 {
-                    var model = new Employee()
-                    {
-                        Name = employee.Name,
-                        Position = employee.Position,
-                        PhoneNumber = employee.PhoneNumber,
-                        Email = employee.Email,
-                        CompanyId = employee.CompanyId
-                    };
-
-                    return Request.CreateResponse(HttpStatusCode.OK, model);
+                    return Request.CreateResponse(HttpStatusCode.OK, employee);
                 }
                 else
                 {
