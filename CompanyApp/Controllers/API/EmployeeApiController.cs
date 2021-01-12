@@ -1,4 +1,5 @@
-﻿using CompanyApp.Models;
+﻿using CompanyApp.Handler;
+using CompanyApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,67 +15,104 @@ namespace CompanyApp.Controllers.API
     {
         public HttpResponseMessage Create(Employee model)
         {
-            var company = companyList.FirstOrDefault(x => x.Id == model.CompanyId);
-            if (company != null)
+            var handler = new EmployeeHandler();
+
+            try
             {
-                model.Company = company;
-                employeeList.Add(model);
-                return Request.CreateResponse(HttpStatusCode.OK, model);
+                var success = handler.Create(model);
+
+                if (success)
+                {
+                    return Request.CreateResponse(HttpStatusCode.Created);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
-            else
+            catch(Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
 
         public HttpResponseMessage Get(int id)
         {
-            var employee = employeeList.FirstOrDefault(x => x.Id == id);
+            var handler = new EmployeeHandler();
 
-            if (employee != null)
+            try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, employee);
+                var employee = handler.Get(id);
+
+                if (employee != null)
+                {
+                    var model = new Employee()
+                    {
+                        Name = employee.Name,
+                        Position = employee.Position,
+                        PhoneNumber = employee.PhoneNumber,
+                        Email = employee.Email,
+                        CompanyId = employee.CompanyId
+                    };
+
+                    return Request.CreateResponse(HttpStatusCode.OK, model);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
-            else
+            catch(Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
 
         [HttpPut]
         public HttpResponseMessage Update(int id, Employee model)
         {
-            var employee = employeeList.FirstOrDefault(x => x.Id == id);
-            var company = companyList.FirstOrDefault(x => x.Id == model.CompanyId);
+            var handler = new EmployeeHandler();
 
-            if (employee != null && company != null)
+            try
             {
-                employee.Name = model.Name;
-                employee.Position = model.Position;
-                employee.PhoneNumber = model.PhoneNumber;
-                employee.Email = model.Email;
-                employee.CompanyId = model.CompanyId;
-                employee.Company = company;
-                return Request.CreateResponse(HttpStatusCode.OK, employee);
+                var success = handler.Update(id, model);
+
+                if (success)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK);
+
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
-            else
+            catch (Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
 
         public HttpResponseMessage Delete(int id)
         {
-            var employee = employeeList.FirstOrDefault(x => x.Id == id);
+            var handler = new EmployeeHandler();
 
-            if (employee != null)
+            try
             {
-                employeeList.Remove(employee);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                bool success = handler.Delete(id);
+
+                if (success)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
-            else
+            catch(Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
     }

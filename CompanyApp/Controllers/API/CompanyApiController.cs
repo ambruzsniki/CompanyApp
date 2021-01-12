@@ -1,4 +1,6 @@
-﻿using CompanyApp.Models;
+﻿using CompanyApp.Handler;
+using CompanyApp.Models;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,56 +11,95 @@ namespace CompanyApp.Controllers
 {
     public class CompanyApiController : ApiController
     {
-        public void Create(Company model)
+        public HttpResponseMessage Create(Company model)
         {
-            companyList.Add(model);
+            var handler = new CompanyHandler();
+
+            try
+            {
+                handler.Create(model);
+                return Request.CreateResponse(HttpStatusCode.Created);
+            }
+            catch(Exception e)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
         }
 
         public HttpResponseMessage Get(int id)
         {
-            var company = companyList.FirstOrDefault(x => x.Id == id);
+            var handler = new CompanyHandler();
 
-            if (company != null)
+            try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, company);
+                var company = handler.Get(id);
+
+                if (company != null)
+                {
+                    var model = new Company()
+                    {
+                        CompanyName = company.CompanyName,
+                        Address = company.Address,
+                        PhoneNumber = company.PhoneNumber
+                    };
+
+                    return Request.CreateResponse(HttpStatusCode.OK, model);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
-            else
+            catch(Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }           
         }
 
         [HttpPut]
         public HttpResponseMessage Update(int id, Company model)
         {
-            var company = companyList.FirstOrDefault(x => x.Id == id);
+            var handler = new CompanyHandler();
 
-            if (company != null)
+            try
             {
-                company.CompanyName = model.CompanyName;
-                company.Address = model.Address;
-                company.PhoneNumber = model.PhoneNumber;
-                return Request.CreateResponse(HttpStatusCode.OK, company);
+                var success = handler.Update(id, model);
+
+                if (success)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
-            else
+            catch(Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
 
         public HttpResponseMessage Delete(int id)
         {
-            var company = companyList.FirstOrDefault(x => x.Id == id);
-           
-            if(company != null)
+            var handler = new CompanyHandler();
+
+            try
             {
-                companyList.Remove(company);
-                employeeList.RemoveAll(x => x.CompanyId == company.Id);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                var success = handler.Delete(id);
+
+                if (success)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
-            else
+            catch (Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
 

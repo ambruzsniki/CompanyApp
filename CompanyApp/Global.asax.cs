@@ -1,6 +1,8 @@
-﻿using CompanyApp.Models;
+﻿using CompanyApp.Migrations;
+using CompanyApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -20,6 +22,7 @@ namespace CompanyApp
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             CompanyApp.Init.CreateInstances();
+            Database.SetInitializer<DbContext>(null);
             GlobalConfiguration.Configuration.EnsureInitialized();
         }
     }
